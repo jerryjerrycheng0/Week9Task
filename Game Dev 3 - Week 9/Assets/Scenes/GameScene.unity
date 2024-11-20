@@ -2391,6 +2391,52 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1 &401449063
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 401449065}
+  - component: {fileID: 401449064}
+  m_Layer: 0
+  m_Name: Pool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &401449064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 401449063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baaede15432374f4d9f425f1f062e4b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletPool: {fileID: 11400000, guid: 39d0343c343072c4a92a0aa62c5259e8, type: 2}
+  muzzleFlashPool: {fileID: 11400000, guid: 9670b4e2364cdf34c8f602a0c72aa902, type: 2}
+--- !u!4 &401449065
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 401449063}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.248935, y: -5.1987643, z: 0.31592214}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &414280757
 GameObject:
   m_ObjectHideFlags: 0
@@ -3121,7 +3167,6 @@ MonoBehaviour:
   bulletShot: {fileID: 11400000, guid: 6bfb8f60e4393fd45910d0451f178df8, type: 2}
   muzzleFlash: {fileID: 4667825704754077554, guid: beb9e7237d72de44f90d937a39a0f4c4, type: 3}
   sparks: {fileID: 100483233}
-  bulletPrefab: {fileID: 5698019074274573562, guid: baf933fa361c0554bb4ca64e400d2134, type: 3}
 --- !u!70 &971999810
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -6009,3 +6054,4 @@ SceneRoots:
   - {fileID: 534768285}
   - {fileID: 1162043836}
   - {fileID: 1813906475}
+  - {fileID: 401449065}
