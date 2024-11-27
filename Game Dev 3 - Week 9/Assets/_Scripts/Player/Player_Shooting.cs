@@ -64,11 +64,14 @@ namespace GameDevWithMarco.Player
         {
             var muzzleFlashObject = ObjectPoolingPattern.Instance.GetPoolItem(ObjectPoolingPattern.TypeOfPool.MuzzleFlash);
             float randomValue = Random.Range(0.8f, 1.25f);
-            muzzleFlashObject.transform.localScale = new Vector3(randomValue, randomValue, randomValue);
-            var muzzleFlashScript = muzzleFlashObject.GetComponent<Player_MuzzleFlash>();
-            StartCoroutine(muzzleFlashScript.ReturnToPool());
 
-            muzzleFlash.transform.position = tipOfTheBarrel.position;
+            muzzleFlashObject.transform.localScale = new Vector3(randomValue, randomValue, randomValue);
+
+            muzzleFlashObject.transform.position = tipOfTheBarrel.position;
+
+            var muzzleFlashScript = muzzleFlashObject.GetComponent<Player_MuzzleFlash>();
+
+            StartCoroutine(muzzleFlashScript.ReturnToPool());
         }
 
         private void FireBulletInRightDirection(Rigidbody2D bulletsRb)
