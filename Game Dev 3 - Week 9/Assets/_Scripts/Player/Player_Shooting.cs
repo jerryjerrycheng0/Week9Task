@@ -67,11 +67,11 @@ namespace GameDevWithMarco.Player
 
             muzzleFlashObject.transform.localScale = new Vector3(randomValue, randomValue, randomValue);
 
-            muzzleFlashObject.transform.position = tipOfTheBarrel.position;
-
             var muzzleFlashScript = muzzleFlashObject.GetComponent<Player_MuzzleFlash>();
 
             StartCoroutine(muzzleFlashScript.ReturnToPool());
+
+            muzzleFlashObject.transform.position = tipOfTheBarrel.position;
         }
 
         private void FireBulletInRightDirection(Rigidbody2D bulletsRb)

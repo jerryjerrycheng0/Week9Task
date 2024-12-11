@@ -24,10 +24,17 @@ namespace GameDevWithMarco.Player
                 var flash = flashObj.GetComponent<Player_MuzzleFlash>();
 
                 StartCoroutine(flash.ReturnToPool());
+                StartCoroutine(DeactivateAfter());
 
                 //Destroy(flashObj, 0.5f);
             }
-            //Returns the game object to the available pool
+
+        }
+
+        IEnumerator DeactivateAfter()
+        {
+            yield return new WaitForSeconds(1.1f);
+            
             gameObject.SetActive(false);
         }
     }
