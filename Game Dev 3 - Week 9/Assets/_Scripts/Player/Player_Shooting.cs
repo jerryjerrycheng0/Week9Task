@@ -21,7 +21,7 @@ namespace GameDevWithMarco.Player
             playerMovementRef = GetComponent<Player_Movement>();
             rb = GetComponent<Rigidbody2D>();
         }
-        // Update is called once per frame
+
         void Update()
         {
             if (Input.GetButtonDown("Fire1"))
@@ -32,31 +32,36 @@ namespace GameDevWithMarco.Player
 
         void Fire()
         {
-            //Spawns the bullet
+            // Spawns the bullet
             GameObject spawnedBullet = ObjectPoolingPattern.Instance.GetPoolItem(ObjectPoolingPattern.TypeOfPool.BulletPool);
 
-            //Make the bullet be in the right position
-            if (spawnedBullet != null) spawnedBullet.transform.position = tipOfTheBarrel.transform.position;
+            // Make the bullet be in the right position
+            if (spawnedBullet != null)
+            {
+                spawnedBullet.transform.position = tipOfTheBarrel.transform.position;
+                spawnedBullet.transform.rotation = tipOfTheBarrel.transform.rotation;
+            }
 
-            //Random bullet scale
+            // Random bullet scale
             RandomiseBulletSize(spawnedBullet);
 
-            //Fires the bullet
+            // Fires the bullet
             Rigidbody2D bulletsRb = spawnedBullet.GetComponent<Rigidbody2D>();
             FireBulletInRightDirection(bulletsRb);
 
-            //Does a pushback
+            // Does a pushback
             PushBack();
-            //Raises the event
+
+            // Raises the event
             bulletShot.Raise();
 
-            //Fires the ripple effect
+            // Fires the ripple effect
             CameraRippleEffect.Instance.Ripple(tipOfTheBarrel.transform.position);
 
-            //Muzzle flash code
+            // Muzzle flash code
             MuzzleFlashLogic();
 
-            //Plays the sparks particles
+            // Plays the sparks particles
             sparks.Play();
         }
 
@@ -76,14 +81,9 @@ namespace GameDevWithMarco.Player
 
         private void FireBulletInRightDirection(Rigidbody2D bulletsRb)
         {
-            if (playerMovementRef.facingRight == true)
-            {
-                bulletsRb.AddForce(Vector2.right * bulletSpeed * 100);
-            }
-            else
-            {
-                bulletsRb.AddForce(Vector2.left * bulletSpeed * 100);
-            }
+            // Calculate the direction based on the barrel's rotation
+            Vector2 firingDirection = tipOfTheBarrel.right; // 'right' points in the local x-axis direction of the barrel
+            bulletsRb.AddForce(firingDirection * bulletSpeed * 100);
         }
 
         private void RandomiseBulletSize(GameObject spawnedBullet)
@@ -94,14 +94,9 @@ namespace GameDevWithMarco.Player
 
         public void PushBack()
         {
-            if (playerMovementRef.facingRight == true)
-            {
-                rb.AddForce(Vector2.left * pushBackForce * 100);
-            }
-            else
-            {
-                rb.AddForce(Vector2.right * pushBackForce * 100);
-            }
+            // Push back the player opposite to the firing direction
+            Vector2 pushBackDirection = -tipOfTheBarrel.right; // Opposite to the direction the barrel is pointing
+            rb.AddForce(pushBackDirection * pushBackForce * 100);
         }
     }
 }
