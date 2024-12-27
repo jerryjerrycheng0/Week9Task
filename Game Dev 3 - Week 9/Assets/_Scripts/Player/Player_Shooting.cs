@@ -5,7 +5,7 @@ using GameDevWithMarco.Interfaces;
 
 namespace GameDevWithMarco.Player
 {
-    public class Player_Shooting : MonoBehaviour, IWeapon
+    public class Player_Shooting : MonoBehaviour
     {
         [SerializeField] Transform tipOfTheBarrel;
         [SerializeField] Transform ejectionPort;
@@ -26,7 +26,7 @@ namespace GameDevWithMarco.Player
         {
             if (Input.GetButtonDown("Fire1"))
             {
-                Use();
+                Fire();
             }
         }
 
@@ -99,9 +99,5 @@ namespace GameDevWithMarco.Player
             rb.AddForce(pushBackDirection * pushBackForce * 100);
         }
 
-        public void Use()
-        {
-            Fire();
-        }
     }
 }

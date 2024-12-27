@@ -26,7 +26,10 @@ namespace GameDevWithMarco.Player
 
         void Update()
         {
-            Use();
+            if (Input.GetButtonDown("Fire1"))
+            {
+                Fire();
+            }
         }
 
         void Fire()
@@ -85,13 +88,6 @@ namespace GameDevWithMarco.Player
             muzzleFlashObject.transform.position = tipOfTheBarrel.position;
         }
 
-        public void Use()
-        {
-            if (Input.GetButtonDown("Fire1"))
-            {
-                Fire();
-            }
-        }
 
         private void Reload()
         {
