@@ -5,7 +5,7 @@ using GameDevWithMarco.Interfaces;
 
 namespace GameDevWithMarco.Player
 {
-    public class Player_ShootingSniper : MonoBehaviour, IWeapon
+    public class Player_ShootingSniper : MonoBehaviour
     {
         [SerializeField] Transform tipOfTheBarrel;
         [SerializeField] Transform ejectionPort;
