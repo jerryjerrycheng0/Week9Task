@@ -4189,6 +4189,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPool: {fileID: 11400000, guid: 39d0343c343072c4a92a0aa62c5259e8, type: 2}
   muzzleFlashPool: {fileID: 11400000, guid: 9670b4e2364cdf34c8f602a0c72aa902, type: 2}
+  currentWeapon: {fileID: 0}
 --- !u!4 &401449065
 Transform:
   m_ObjectHideFlags: 0
@@ -6921,6 +6922,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1499932572171485435, guid: 020bdb82c48e631468e29ff97b2552fd, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2629587155563074685, guid: 020bdb82c48e631468e29ff97b2552fd, type: 3}
       propertyPath: m_Name
       value: Player
@@ -6952,6 +6957,10 @@ PrefabInstance:
     - target: {fileID: 6576699474646149058, guid: 020bdb82c48e631468e29ff97b2552fd, type: 3}
       propertyPath: m_GravityScale
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6690444019552973320, guid: 020bdb82c48e631468e29ff97b2552fd, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

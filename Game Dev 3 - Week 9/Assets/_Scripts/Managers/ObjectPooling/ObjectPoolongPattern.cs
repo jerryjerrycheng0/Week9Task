@@ -9,17 +9,22 @@ namespace GameDevWithMarco.DesignPattern
         [SerializeField] PoolData bulletPool;
         [SerializeField] PoolData muzzleFlashPool;
 
+
         public enum TypeOfPool
         {
             BulletPool,
-            MuzzleFlash
+            MuzzleFlash,
+
         }
+
+        public GameObject currentWeapon; // Tracks the currently active weapon
 
         // Start is called before the first frame update
         void Start()
         {
             FillThePool(bulletPool);
             FillThePool(muzzleFlashPool);
+
         }
 
         private void FillThePool(PoolData poolData)
@@ -44,14 +49,14 @@ namespace GameDevWithMarco.DesignPattern
                     pool = bulletPool;
                     break;
                 case TypeOfPool.MuzzleFlash:
-                    pool = muzzleFlashPool; 
+                    pool = muzzleFlashPool;
                     break;
 
             }
 
-            for (int i = 0;i < pool.pooledObjectContainer.Count; i++)
+            for (int i = 0; i < pool.pooledObjectContainer.Count; i++)
             {
-                if(!pool.pooledObjectContainer[i].activeInHierarchy)
+                if (!pool.pooledObjectContainer[i].activeInHierarchy)
                 {
                     pool.pooledObjectContainer[i].SetActive(true);
                     return pool.pooledObjectContainer[i];
@@ -59,7 +64,6 @@ namespace GameDevWithMarco.DesignPattern
             }
 
             Debug.LogWarning("No Available Items Found or Pool Too Small!");
-
             return null;
         }
 

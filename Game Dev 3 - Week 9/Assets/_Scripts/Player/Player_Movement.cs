@@ -52,6 +52,10 @@ namespace GameDevWithMarco.Player
         public float gravityValue = 1f;
         public float fallMultiplier = 5f;
 
+        [Header("Guns")]
+        public GameObject shotgunPrefab;
+        public GameObject sniperPrefab;
+        bool isShotgun = true;
 
 
         //-------
@@ -67,6 +71,7 @@ namespace GameDevWithMarco.Player
         // Update is called once per frame
         void Update()
         {
+            SwitchGuns();
             GetMovementValue();
 
             if (Input.GetButtonDown("Jump") && amIGrounded)
@@ -82,10 +87,6 @@ namespace GameDevWithMarco.Player
             HorizontalMovement();
             ModifyPhysics();
         }
-
-
-
-
 
 
         //-------
@@ -215,6 +216,25 @@ namespace GameDevWithMarco.Player
             else
             {
                 Debug.DrawRay(raycastRightPos.position, Vector2.down * rayLenght, Color.red);
+            }
+        }
+
+        private void SwitchGuns()
+        {
+            if (Input.GetKeyDown(KeyCode.LeftShift))
+            {
+                if(isShotgun == true)
+                {
+                    shotgunPrefab.gameObject.SetActive(false);
+                    sniperPrefab.gameObject.SetActive(true);
+                    isShotgun = false;
+                }
+                else
+                {
+                    shotgunPrefab.gameObject.SetActive(true);
+                    sniperPrefab.gameObject.SetActive(false);
+                    isShotgun = true;
+                }
             }
         }
     }

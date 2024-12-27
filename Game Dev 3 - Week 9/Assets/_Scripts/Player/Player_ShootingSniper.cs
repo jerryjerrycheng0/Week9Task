@@ -5,17 +5,19 @@ using GameDevWithMarco.Interfaces;
 
 namespace GameDevWithMarco.Player
 {
-    public class Player_Shooting : MonoBehaviour, IWeapon
+    public class Player_ShootingSniper : MonoBehaviour, IWeapon
     {
         [SerializeField] Transform tipOfTheBarrel;
         [SerializeField] Transform ejectionPort;
         [SerializeField] float bulletSpeed;
-        [SerializeField] Player_Movement playerMovementRef;
-        [SerializeField] Rigidbody2D rb;
         [SerializeField] float pushBackForce;
+        [SerializeField] float recoilForce; // Additional recoil force
+        [SerializeField] float reloadTime;
         [SerializeField] GameEvent bulletShot;
         [SerializeField] GameObject muzzleFlash;
         [SerializeField] ParticleSystem sparks;
+        [SerializeField] Rigidbody2D rb; // Reference to the player's Rigidbody2D
+        private bool canShoot = true;
 
         private void Start()
         {
@@ -24,14 +26,15 @@ namespace GameDevWithMarco.Player
 
         void Update()
         {
-            if (Input.GetButtonDown("Fire1"))
-            {
-                Use();
-            }
+            Use();
         }
 
         void Fire()
         {
+            if (!canShoot) return;
+
+            canShoot = false;
+
             // Spawns the bullet
             GameObject spawnedBullet = ObjectPoolingPattern.Instance.GetPoolItem(ObjectPoolingPattern.TypeOfPool.BulletPool);
 
@@ -42,27 +45,30 @@ namespace GameDevWithMarco.Player
                 spawnedBullet.transform.rotation = tipOfTheBarrel.transform.rotation;
             }
 
-            // Random bullet scale
-            RandomiseBulletSize(spawnedBullet);
-
             // Fires the bullet
             Rigidbody2D bulletsRb = spawnedBullet.GetComponent<Rigidbody2D>();
-            FireBulletInRightDirection(bulletsRb);
+            Vector2 firingDirection = tipOfTheBarrel.right; // 'right' points in the local x-axis direction of the barrel
+            bulletsRb.AddForce(firingDirection * bulletSpeed * 100);
 
-            // Does a pushback
-            PushBack();
+            // Apply recoil
+            ApplyRecoil(firingDirection);
 
-            // Raises the event
+            // Trigger effects
             bulletShot.Raise();
-
-            // Fires the ripple effect
+            MuzzleFlashLogic();
+            sparks.Play();
             CameraRippleEffect.Instance.Ripple(tipOfTheBarrel.transform.position);
 
-            // Muzzle flash code
-            MuzzleFlashLogic();
+            // Reload logic
+            Invoke(nameof(Reload), reloadTime);
+        }
 
-            // Plays the sparks particles
-            sparks.Play();
+        private void ApplyRecoil(Vector2 firingDirection)
+        {
+            // Push back the player in the opposite direction
+            Vector2 recoilDirection = -firingDirection.normalized;
+            rb.AddForce(recoilDirection * recoilForce * 100);
+
         }
 
         private void MuzzleFlashLogic()
@@ -79,29 +85,17 @@ namespace GameDevWithMarco.Player
             muzzleFlashObject.transform.position = tipOfTheBarrel.position;
         }
 
-        private void FireBulletInRightDirection(Rigidbody2D bulletsRb)
-        {
-            // Calculate the direction based on the barrel's rotation
-            Vector2 firingDirection = tipOfTheBarrel.right; // 'right' points in the local x-axis direction of the barrel
-            bulletsRb.AddForce(firingDirection * bulletSpeed * 100);
-        }
-
-        private void RandomiseBulletSize(GameObject spawnedBullet)
-        {
-            float randomScaleValue = Random.Range(0.7f, 1.3f);
-            spawnedBullet.transform.localScale = new Vector3(randomScaleValue, randomScaleValue, randomScaleValue);
-        }
-
-        public void PushBack()
-        {
-            // Push back the player opposite to the firing direction
-            Vector2 pushBackDirection = -tipOfTheBarrel.right; // Opposite to the direction the barrel is pointing
-            rb.AddForce(pushBackDirection * pushBackForce * 100);
-        }
-
         public void Use()
         {
-            Fire();
+            if (Input.GetButtonDown("Fire1"))
+            {
+                Fire();
+            }
+        }
+
+        private void Reload()
+        {
+            canShoot = true;
         }
     }
 }
