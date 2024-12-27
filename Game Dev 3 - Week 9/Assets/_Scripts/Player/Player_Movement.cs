@@ -55,7 +55,8 @@ namespace GameDevWithMarco.Player
         [Header("Guns")]
         public GameObject shotgunPrefab;
         public GameObject sniperPrefab;
-        bool isShotgun = true;
+        public bool isShotgun = false;
+        public bool isSniper = false;
 
 
         //-------
@@ -66,6 +67,9 @@ namespace GameDevWithMarco.Player
         void Start()
         {
             rb = GetComponent<Rigidbody2D>();
+            shotgunPrefab.gameObject.SetActive(false);
+            sniperPrefab.gameObject.SetActive(false);
+
         }
 
         // Update is called once per frame
@@ -223,17 +227,19 @@ namespace GameDevWithMarco.Player
         {
             if (Input.GetKeyDown(KeyCode.LeftShift))
             {
-                if(isShotgun == true)
+                if(isShotgun == true || isSniper == false)
                 {
                     shotgunPrefab.gameObject.SetActive(false);
                     sniperPrefab.gameObject.SetActive(true);
                     isShotgun = false;
+                    isSniper = true;
                 }
-                else
+                else if (isShotgun == false || isSniper == true)
                 {
                     shotgunPrefab.gameObject.SetActive(true);
                     sniperPrefab.gameObject.SetActive(false);
                     isShotgun = true;
+                    isSniper = false;
                 }
             }
         }

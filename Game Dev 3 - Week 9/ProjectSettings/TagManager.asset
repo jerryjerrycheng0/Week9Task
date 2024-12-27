@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Ground
   - HeadTrigger
+  - Sniper
+  - Shotgun
   layers:
   - Default
   - TransparentFX
