@@ -1,7 +1,8 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using GameDevWithMarco.Interfaces;
 
 namespace GameDevWithMarco.Player
 {
@@ -227,19 +228,15 @@ namespace GameDevWithMarco.Player
         {
             if (Input.GetKeyDown(KeyCode.LeftShift))
             {
-                if(isShotgun == true || isSniper == false)
-                {
-                    shotgunPrefab.gameObject.SetActive(false);
-                    sniperPrefab.gameObject.SetActive(true);
-                    isShotgun = false;
-                    isSniper = true;
-                }
-                else if (isShotgun == false || isSniper == true)
+                if (isShotgun == true || isSniper == false)
                 {
                     shotgunPrefab.gameObject.SetActive(true);
                     sniperPrefab.gameObject.SetActive(false);
-                    isShotgun = true;
-                    isSniper = false;
+                }
+                else if (isShotgun == true || isSniper == true)
+                {
+                    shotgunPrefab.gameObject.SetActive(false);
+                    sniperPrefab.gameObject.SetActive(true);
                 }
             }
         }

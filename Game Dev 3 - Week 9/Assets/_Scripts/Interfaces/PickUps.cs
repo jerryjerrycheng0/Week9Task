@@ -8,34 +8,34 @@ namespace GameDevWithMarco.Interfaces
     public class PickUps : MonoBehaviour, IWeapon
     {
         public bool Dropped = true;
-        public bool Gun = true;
+        public bool Gun = true; // Indicates if this is a shotgun (true) or sniper (false)
         [SerializeField] Player_Movement playerMovement;
+
         void OnCollisionEnter2D(Collision2D col)
         {
-            if(col.gameObject.CompareTag ("Player"))
+            if (col.gameObject.CompareTag("Player"))
             {
-                gameObject.SetActive(false);
+                // Pick up the weapon
+                PickUp();
+                gameObject.SetActive(false); // Hide the pickup object
                 Dropped = false;
             }
-            PickUp();
-           
         }
+
         public void PickUp()
         {
-            if (Gun == true)
+            // Activate the correct weapon in the Player_Movement script
+            if (Gun)
             {
                 playerMovement.isShotgun = true;
-                playerMovement.isSniper = false;
+                playerMovement.sniperPrefab.SetActive(false);
+                playerMovement.shotgunPrefab.SetActive(true);
             }
             else
             {
-                playerMovement.isShotgun = false;
                 playerMovement.isSniper = true;
-            }
-            if (Input.GetKeyDown(KeyCode.Backspace))
-            {
-                gameObject.SetActive(true);
-                Dropped = true;
+                playerMovement.sniperPrefab.SetActive(true);
+                playerMovement.shotgunPrefab.SetActive(false);
             }
         }
     }

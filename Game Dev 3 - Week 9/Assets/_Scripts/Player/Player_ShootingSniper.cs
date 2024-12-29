@@ -1,97 +1,103 @@
 using UnityEngine;
-using GameDevWithMarco.CameraStuff;
 using GameDevWithMarco.DesignPattern;
-using GameDevWithMarco.Interfaces;
+using System.Collections;
 
 namespace GameDevWithMarco.Player
 {
     public class Player_ShootingSniper : MonoBehaviour
     {
-        [SerializeField] Transform tipOfTheBarrel;
-        [SerializeField] Transform ejectionPort;
-        [SerializeField] float bulletSpeed;
-        [SerializeField] float pushBackForce;
-        [SerializeField] float recoilForce; // Additional recoil force
-        [SerializeField] float reloadTime;
-        [SerializeField] GameEvent bulletShot;
-        [SerializeField] GameObject muzzleFlash;
-        [SerializeField] ParticleSystem sparks;
-        [SerializeField] Rigidbody2D rb; // Reference to the player's Rigidbody2D
-        private bool canShoot = true;
+        [Header("Shooting Variables")]
+        [SerializeField] private Transform tipOfTheBarrel; // Assigned dynamically
+        [SerializeField] private float bulletSpeed; // Bullet speed
+        [SerializeField] private GameEvent bulletShot; // Event to raise when bullet is shot
+        [SerializeField] private ParticleSystem sparks; // Particle system for sparks
+        [SerializeField] private GameObject muzzleFlash; // Muzzle flash effect
+
+        [Header("Reloading Variables")]
+        [SerializeField] private float reloadTime = 2f; // Time it takes to reload the sniper rifle
+        [SerializeField] private bool isReloading = false; // Track reload state
+        [SerializeField] private int maxAmmo = 5; // Max ammo count
+        [SerializeField] private int currentAmmo; // Current ammo count
+
+        private Transform weaponTransform; // Current weapon's transform
+        private Player_Recoil playerRecoil; // Reference to the recoil script
 
         private void Start()
         {
-
+            playerRecoil = FindObjectOfType<Player_Recoil>();
+            currentAmmo = maxAmmo; // Start with max ammo
         }
 
-        void Update()
+        private void Update()
         {
-            if (Input.GetButtonDown("Fire1"))
+            if (isReloading)
+            {
+                return; // If reloading, don't allow shooting
+            }
+
+            if (Input.GetButtonDown("Fire1") && tipOfTheBarrel != null && currentAmmo > 0)
             {
                 Fire();
             }
+
+            // Handle reloading
+            if (Input.GetKeyDown(KeyCode.R) && currentAmmo < maxAmmo)
+            {
+                StartCoroutine(Reload());
+            }
         }
 
-        void Fire()
+        // Bind weapon when it is switched or equipped
+        public void BindWeapon(Transform weapon)
         {
-            if (!canShoot) return;
+            weaponTransform = weapon;
+            tipOfTheBarrel = weaponTransform.Find("TipOfTheBarrel");
+        }
 
-            canShoot = false;
-
-            // Spawns the bullet
+        // Fire method - shooting the sniper rifle
+        private void Fire()
+        {
+            // Spawn a bullet from the pool
             GameObject spawnedBullet = ObjectPoolingPattern.Instance.GetPoolItem(ObjectPoolingPattern.TypeOfPool.BulletPool);
 
-            // Make the bullet be in the right position
-            if (spawnedBullet != null)
+            if (spawnedBullet != null && tipOfTheBarrel != null)
             {
-                spawnedBullet.transform.position = tipOfTheBarrel.transform.position;
-                spawnedBullet.transform.rotation = tipOfTheBarrel.transform.rotation;
+                spawnedBullet.transform.position = tipOfTheBarrel.position;
+                spawnedBullet.transform.rotation = tipOfTheBarrel.rotation;
+
+                Rigidbody2D bulletsRb = spawnedBullet.GetComponent<Rigidbody2D>();
+                bulletsRb.AddForce(tipOfTheBarrel.right * bulletSpeed * 100); // Apply force for the bullet
+
+                // Apply recoil after firing
+                playerRecoil?.ApplyRecoil(tipOfTheBarrel.right);
+
+                // Trigger muzzle flash effect
+                if (muzzleFlash != null)
+                {
+                    GameObject flash = Instantiate(muzzleFlash, tipOfTheBarrel.position, tipOfTheBarrel.rotation);
+                    Destroy(flash, 0.1f); // Destroy the muzzle flash after a short duration
+                }
+
+                // Trigger shooting effects
+                bulletShot.Raise();
+                sparks.Play();
+
+                // Decrease ammo count
+                currentAmmo--;
             }
-
-            // Fires the bullet
-            Rigidbody2D bulletsRb = spawnedBullet.GetComponent<Rigidbody2D>();
-            Vector2 firingDirection = tipOfTheBarrel.right; // 'right' points in the local x-axis direction of the barrel
-            bulletsRb.AddForce(firingDirection * bulletSpeed * 100);
-
-            // Apply recoil
-            ApplyRecoil(firingDirection);
-
-            // Trigger effects
-            bulletShot.Raise();
-            MuzzleFlashLogic();
-            sparks.Play();
-            CameraRippleEffect.Instance.Ripple(tipOfTheBarrel.transform.position);
-
-            // Reload logic
-            Invoke(nameof(Reload), reloadTime);
         }
 
-        private void ApplyRecoil(Vector2 firingDirection)
+        // Reloading logic with a cooldown
+        private IEnumerator Reload()
         {
-            // Push back the player in the opposite direction
-            Vector2 recoilDirection = -firingDirection.normalized;
-            rb.AddForce(recoilDirection * recoilForce * 100);
+            isReloading = true;
 
-        }
+            // Trigger reload animation or effects if needed
 
-        private void MuzzleFlashLogic()
-        {
-            var muzzleFlashObject = ObjectPoolingPattern.Instance.GetPoolItem(ObjectPoolingPattern.TypeOfPool.MuzzleFlash);
-            float randomValue = Random.Range(0.8f, 1.25f);
+            yield return new WaitForSeconds(reloadTime); // Wait for the reload time to finish
 
-            muzzleFlashObject.transform.localScale = new Vector3(randomValue, randomValue, randomValue);
-
-            var muzzleFlashScript = muzzleFlashObject.GetComponent<Player_MuzzleFlash>();
-
-            StartCoroutine(muzzleFlashScript.ReturnToPool());
-
-            muzzleFlashObject.transform.position = tipOfTheBarrel.position;
-        }
-
-
-        private void Reload()
-        {
-            canShoot = true;
+            currentAmmo = maxAmmo; // Set ammo to max after reloading
+            isReloading = false; // Reload complete
         }
     }
 }

@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pooledObjectContainer:
   - {fileID: 0}
-  poolAmount: 1
+  - {fileID: 0}
+  poolAmount: 2
   poolItem: {fileID: 4889969699394356394, guid: 415d6e531fb7a7a4196c7b36de3a7355, type: 3}

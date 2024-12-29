@@ -74,6 +74,8 @@ GameObject:
   - component: {fileID: 5086924998483128391}
   - component: {fileID: 3011870979531971461}
   - component: {fileID: 4704232543460977908}
+  - component: {fileID: 9102534026903648574}
+  - component: {fileID: 2547759174934887006}
   - component: {fileID: 675552897252975443}
   m_Layer: 0
   m_Name: Player
@@ -155,8 +157,6 @@ MonoBehaviour:
   rayLenght: 0.1
   gravityValue: 1
   fallMultiplier: 5
-  shotgunPrefab: {fileID: 1499932572171485435}
-  sniperPrefab: {fileID: 8915985900546805803}
 --- !u!114 &4704232543460977908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -169,6 +169,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e1d1ac1660a36d459437be9d9cd7c9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &9102534026903648574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2629587155563074685}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3df3ca50b25d2ee4f93271773ef68ea9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerRb: {fileID: 5086924998483128391}
+  pushBackForce: 10
+--- !u!114 &2547759174934887006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2629587155563074685}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3e8cb0633e66e94fb7bf84a64bdf79b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 6194216851686150705}
 --- !u!70 &675552897252975443
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -428,11 +455,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4860465147802654778, guid: 2c6053c8015894942ba358a50a1bf7b0, type: 3}
   m_PrefabInstance: {fileID: 4064314463403693185}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &8915985900546805803 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4889969699394356394, guid: 2c6053c8015894942ba358a50a1bf7b0, type: 3}
-  m_PrefabInstance: {fileID: 4064314463403693185}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6272526037834450001
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -487,7 +509,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4889969699394356394, guid: 415d6e531fb7a7a4196c7b36de3a7355, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5745970799192425543, guid: 415d6e531fb7a7a4196c7b36de3a7355, type: 3}
       propertyPath: target
@@ -524,25 +546,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce5f389138810f742ae777677452a1ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tipOfTheBarrel: {fileID: 4711026694237986722}
-  ejectionPort: {fileID: 4242571028882920058}
   bulletSpeed: 10
-  playerMovementRef: {fileID: 3011870979531971461}
-  rb: {fileID: 5086924998483128391}
-  pushBackForce: 2
   bulletShot: {fileID: 11400000, guid: 6bfb8f60e4393fd45910d0451f178df8, type: 2}
-  muzzleFlash: {fileID: 4667825704754077554, guid: beb9e7237d72de44f90d937a39a0f4c4, type: 3}
   sparks: {fileID: 7669355981906572986}
---- !u!4 &4242571028882920058 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7920950957874927147, guid: 415d6e531fb7a7a4196c7b36de3a7355, type: 3}
-  m_PrefabInstance: {fileID: 6272526037834450001}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &4711026694237986722 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1615825674255391731, guid: 415d6e531fb7a7a4196c7b36de3a7355, type: 3}
-  m_PrefabInstance: {fileID: 6272526037834450001}
-  m_PrefabAsset: {fileID: 0}
+  muzzleFlash: {fileID: 4667825704754077554, guid: beb9e7237d72de44f90d937a39a0f4c4, type: 3}
 --- !u!198 &7669355981906572986 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 4423515130634711787, guid: 415d6e531fb7a7a4196c7b36de3a7355, type: 3}

@@ -8,23 +8,23 @@ namespace GameDevWithMarco.DesignPattern
     {
         [SerializeField] PoolData bulletPool;
         [SerializeField] PoolData muzzleFlashPool;
+        [SerializeField] PoolData weaponPool;
 
+        public GameObject currentWeapon; // Tracks the currently active weapon
 
         public enum TypeOfPool
         {
             BulletPool,
             MuzzleFlash,
-
+            WeaponPool
         }
-
-        public GameObject currentWeapon; // Tracks the currently active weapon
 
         // Start is called before the first frame update
         void Start()
         {
             FillThePool(bulletPool);
             FillThePool(muzzleFlashPool);
-
+            FillThePool(weaponPool);
         }
 
         private void FillThePool(PoolData poolData)
@@ -51,7 +51,9 @@ namespace GameDevWithMarco.DesignPattern
                 case TypeOfPool.MuzzleFlash:
                     pool = muzzleFlashPool;
                     break;
-
+                case TypeOfPool.WeaponPool:
+                    pool = weaponPool;
+                    break;
             }
 
             for (int i = 0; i < pool.pooledObjectContainer.Count; i++)
@@ -67,5 +69,15 @@ namespace GameDevWithMarco.DesignPattern
             return null;
         }
 
+        public void SwitchWeapon(GameObject newWeapon)
+        {
+            if (currentWeapon != null)
+            {
+                currentWeapon.SetActive(false);
+            }
+
+            currentWeapon = newWeapon;
+            currentWeapon.SetActive(true);
+        }
     }
 }

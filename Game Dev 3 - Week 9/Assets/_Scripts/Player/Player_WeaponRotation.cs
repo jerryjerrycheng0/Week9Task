@@ -6,53 +6,41 @@ namespace GameDevWithMarco.Player
 {
     public class Player_WeaponRotation : MonoBehaviour
     {
-        //To store the mouse position
-        private Vector2 mousePosition;
-        //Will store the angle we need
-        private float angle;
-        //RB ref
-        private Rigidbody2D weaponRb;
-        //To set what's the target
-        public Transform target;
+        private Vector2 mousePosition; // To store the mouse position
+        private float angle; // To store the calculated angle
+        [SerializeField] Transform weaponTransform; // Reference to the weapon's Transform
 
-        // Start is called before the first frame update
-        void Start()
-        {
-            //Gets the Rigidbody and puts its data into the variable
-            weaponRb = GetComponent<Rigidbody2D>();
-        }
+        [SerializeField] private Transform target; // The target to follow (e.g., player's hand)
 
-        // Update is called once per frame
-        void Update()
+        private void Update()
         {
-            //Gets the mouse poistion
             mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         }
 
-
         private void FixedUpdate()
         {
-            //Those 2 methods are in the FixedUpdate because they deal with Physics
-            WeaponRotation();
-            WeaponPosition();
+            if (weaponTransform == null) return;
+
+            RotateWeapon();
+            UpdateWeaponPosition();
         }
 
-
-        void WeaponRotation()
+        public void BindWeapon(Transform weapon)
         {
-            //Direction from the mouse position to the crossbow's Rigidbody
-            Vector2 lookDirection = mousePosition - weaponRb.position;
-            //Gets the angle between x and y
+            weaponTransform = weapon;
+        }
+
+        private void RotateWeapon()
+        {
+            // Calculate direction to look towards the mouse
+            Vector2 lookDirection = mousePosition - (Vector2)weaponTransform.position;
             angle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
-            //Uses the angle variable to set the rotation
-            weaponRb.rotation = angle;
+            weaponTransform.rotation = Quaternion.Euler(0, 0, angle);
         }
 
-        void WeaponPosition()
+        private void UpdateWeaponPosition()
         {
-            //Will set the position of the crossbow. Without it, the crossbow will not follow.
-            weaponRb.position = target.position;
+            weaponTransform.position = target.position;
         }
     }
 }
-

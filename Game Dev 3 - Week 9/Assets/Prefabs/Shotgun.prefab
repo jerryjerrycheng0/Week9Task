@@ -42,7 +42,6 @@ GameObject:
   - component: {fileID: 4860465147802654778}
   - component: {fileID: 3249450388511368491}
   - component: {fileID: 9057427230306486856}
-  - component: {fileID: 5745970799192425543}
   - component: {fileID: 885340375404438419}
   - component: {fileID: 852665021897225817}
   - component: {fileID: 1388899308147965636}
@@ -143,19 +142,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &5745970799192425543
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4889969699394356394}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3e8cb0633e66e94fb7bf84a64bdf79b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 0}
 --- !u!50 &885340375404438419
 Rigidbody2D:
   serializedVersion: 4
@@ -240,15 +226,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce5f389138810f742ae777677452a1ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tipOfTheBarrel: {fileID: 1615825674255391731}
-  ejectionPort: {fileID: 7920950957874927147}
   bulletSpeed: 10
-  playerMovementRef: {fileID: 0}
-  rb: {fileID: 0}
-  pushBackForce: 2
   bulletShot: {fileID: 11400000, guid: 6bfb8f60e4393fd45910d0451f178df8, type: 2}
+  sparks: {fileID: 4423515130634711787}
   muzzleFlash: {fileID: 4667825704754077554, guid: beb9e7237d72de44f90d937a39a0f4c4, type: 3}
-  sparks: {fileID: 0}
 --- !u!1 &6059894646996204249
 GameObject:
   m_ObjectHideFlags: 0
@@ -342,6 +323,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0721fa4c8c253194ea9ca3cb0e405f17, type: 3}
+--- !u!198 &4423515130634711787 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 7894946645331532494, guid: 0721fa4c8c253194ea9ca3cb0e405f17, type: 3}
+  m_PrefabInstance: {fileID: 5833014421171595301}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5657305505760655281 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2193761905029439380, guid: 0721fa4c8c253194ea9ca3cb0e405f17, type: 3}
