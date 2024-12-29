@@ -1,6 +1,7 @@
+using System.Collections;
 using UnityEngine;
 using GameDevWithMarco.DesignPattern;
-using System.Collections;
+using GameDevWithMarco.CameraStuff;
 
 namespace GameDevWithMarco.Player
 {
@@ -18,6 +19,10 @@ namespace GameDevWithMarco.Player
         [SerializeField] private bool isReloading = false; // Track reload state
         [SerializeField] private int maxAmmo = 5; // Max ammo count
         [SerializeField] private int currentAmmo; // Current ammo count
+
+        [Header("Sounds")]
+        [SerializeField] AudioSource shootingSound;
+        [SerializeField] AudioSource reloadSound;
 
         private Transform weaponTransform; // Current weapon's transform
         private Player_Recoil playerRecoil; // Reference to the recoil script
@@ -57,6 +62,7 @@ namespace GameDevWithMarco.Player
         // Fire method - shooting the sniper rifle
         private void Fire()
         {
+            CameraRippleEffect.Instance.Ripple(tipOfTheBarrel.transform.position);
             // Spawn a bullet from the pool
             GameObject spawnedBullet = ObjectPoolingPattern.Instance.GetPoolItem(ObjectPoolingPattern.TypeOfPool.BulletPool);
 
@@ -79,18 +85,25 @@ namespace GameDevWithMarco.Player
                 }
 
                 // Trigger shooting effects
-                bulletShot.Raise();
-                sparks.Play();
-
-                // Decrease ammo count
-                currentAmmo--;
+                TriggerEffects();
             }
+        }
+
+        private void TriggerEffects()
+        {
+            bulletShot.Raise();
+            sparks.Play();
+            shootingSound.Play();
+
+            // Decrease ammo count
+            currentAmmo--;
         }
 
         // Reloading logic with a cooldown
         private IEnumerator Reload()
         {
             isReloading = true;
+            reloadSound.Play();
 
             // Trigger reload animation or effects if needed
 

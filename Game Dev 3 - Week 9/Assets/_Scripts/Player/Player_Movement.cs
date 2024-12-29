@@ -1,4 +1,3 @@
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,50 +5,28 @@ using GameDevWithMarco.Interfaces;
 
 namespace GameDevWithMarco.Player
 {
-
     public class Player_Movement : MonoBehaviour
     {
-        /// <summary>
-        /// Video I used to get a juicy movement: https://www.youtube.com/watch?v=USLp-4iwNnQ
-        /// Video I used to get a nice jump: https://www.youtube.com/watch?v=RPdn3r_tqcM
-        /// </summary>
-
-
-
-        //---
-        //References variables
-        //---
+        //--- References and movement variables ---
         Rigidbody2D rb;
 
-        //---
         [Header("Movement Control Variables")]
-        //---
-        [Range(1f, 5f)]
-        public float speed;
-        [Range(1f, 20f)]
-        public float jumpStrenght;
+        [Range(1f, 5f)] public float speed;
+        [Range(1f, 20f)] public float jumpStrenght;
         Vector2 movementValue;
         public bool facingRight = true;
 
-
-        //---
         [Header("Movement Juice Variables")]
-        //---
         public float maxSpeed = 7f;
         public float newLinearDrag = 4f;
 
-        //----
         [Header("Ground Check Variables")]
-        //---
         public bool amIGrounded = true;
         public LayerMask whatIsGround;
         public Transform raycastLeftPos, raycastRightPos;
         public float rayLenght;
 
-
-        //---
-        [Header("Jump juice Variables")]
-        //
+        [Header("Jump Juice Variables")]
         public float gravityValue = 1f;
         public float fallMultiplier = 5f;
 
@@ -58,24 +35,21 @@ namespace GameDevWithMarco.Player
         public GameObject sniperPrefab;
         public bool isShotgun = false;
         public bool isSniper = false;
+        [SerializeField] AudioSource gunSound;
 
+        private bool canSwitchWeapons = false;  // To check if both weapons are picked up
 
-        //-------
-        //Built In Methods
-        //-------
-
-        // Start is called before the first frame update
+        //------- Built-in Methods -------
         void Start()
         {
             rb = GetComponent<Rigidbody2D>();
-            shotgunPrefab.gameObject.SetActive(false);
-            sniperPrefab.gameObject.SetActive(false);
-
+            shotgunPrefab.SetActive(false);
+            sniperPrefab.SetActive(false);
         }
 
-        // Update is called once per frame
         void Update()
         {
+            // Switch between weapons if both are picked up
             SwitchGuns();
             GetMovementValue();
 
@@ -93,10 +67,7 @@ namespace GameDevWithMarco.Player
             ModifyPhysics();
         }
 
-
-        //-------
-        //Custom Methods
-        //-------
+        // Custom Methods for movement
         private void GetMovementValue()
         {
             movementValue = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
@@ -105,9 +76,7 @@ namespace GameDevWithMarco.Player
         private void HorizontalMovement()
         {
             rb.AddForce(Vector2.right * movementValue.x * speed * 10);
-
             CheckIfIShouldFlip();
-
             LimitPlayerVelocity();
         }
 
@@ -133,17 +102,11 @@ namespace GameDevWithMarco.Player
             transform.rotation = Quaternion.Euler(0, facingRight ? 0 : 180, 0);
         }
 
-
         void ModifyPhysics()
         {
-            //Checks if we are changing direction
             bool changingDirection = (movementValue.x > 0 && rb.velocity.x < 0) || (movementValue.x < 0 && rb.velocity.x > 0);
-
-
             if (amIGrounded)
             {
-                //This if else statement adjusts the linear drag to make the
-                //movement feel nice.
                 if (Mathf.Abs(movementValue.x) < 0.4f || changingDirection)
                 {
                     rb.drag = newLinearDrag;
@@ -153,12 +116,10 @@ namespace GameDevWithMarco.Player
                     rb.drag = 0;
                 }
 
-                //This is to adjust the gravity
                 rb.gravityScale = 0;
             }
             else
             {
-                //All this else statement is to make the jump feel juicier
                 rb.gravityScale = gravityValue;
                 rb.drag = newLinearDrag * 0.15f;
 
@@ -171,27 +132,20 @@ namespace GameDevWithMarco.Player
                     rb.gravityScale = gravityValue * (fallMultiplier / 2);
                 }
             }
-
-
         }
+
         private void Jump()
         {
-            rb.velocity = new Vector2(rb.velocity.x, 0);                        //Stops all vertical velocity
-            rb.AddForce(Vector2.up * jumpStrenght, ForceMode2D.Impulse);        //Adds the force required to jump
+            rb.velocity = new Vector2(rb.velocity.x, 0);
+            rb.AddForce(Vector2.up * jumpStrenght, ForceMode2D.Impulse);
         }
-
-
 
         private void GroundCheck()
         {
-            //Checks if the raycasts on the left and right are touching ground
             bool isTouchingOnTheLeft = Physics2D.Raycast(raycastLeftPos.position, Vector2.down, rayLenght, whatIsGround);
             bool isTouchingOnTheRight = Physics2D.Raycast(raycastRightPos.position, Vector2.down, rayLenght, whatIsGround);
-
             RaycastVisualDebug(isTouchingOnTheLeft, isTouchingOnTheRight);
 
-
-            //If you do not put == it will execute if true. This check is checking if one OR the other is true
             if (isTouchingOnTheLeft || isTouchingOnTheRight)
             {
                 amIGrounded = true;
@@ -202,10 +156,8 @@ namespace GameDevWithMarco.Player
             }
         }
 
-
         private void RaycastVisualDebug(bool isTouchingOnTheLeft, bool isTouchingOnTheRight)
         {
-            //Draws them so we can see them. Also changes the color if we are not grounded to red.
             if (isTouchingOnTheLeft)
             {
                 Debug.DrawRay(raycastLeftPos.position, Vector2.down * rayLenght, Color.green);
@@ -226,18 +178,49 @@ namespace GameDevWithMarco.Player
 
         private void SwitchGuns()
         {
-            if (Input.GetKeyDown(KeyCode.LeftShift))
+            // Only switch guns if both are picked up
+            if (canSwitchWeapons && Input.GetKeyDown(KeyCode.LeftShift))
             {
-                if (isShotgun == true || isSniper == false)
+                gunSound.Play();
+                if (isShotgun && isSniper)
                 {
-                    shotgunPrefab.gameObject.SetActive(true);
-                    sniperPrefab.gameObject.SetActive(false);
+                    // Toggle between weapons
+                    if (shotgunPrefab.activeSelf)
+                    {
+                        shotgunPrefab.SetActive(false);
+                        sniperPrefab.SetActive(true);
+                    }
+                    else
+                    {
+                        shotgunPrefab.SetActive(true);
+                        sniperPrefab.SetActive(false);
+                    }
                 }
-                else if (isShotgun == true || isSniper == true)
-                {
-                    shotgunPrefab.gameObject.SetActive(false);
-                    sniperPrefab.gameObject.SetActive(true);
-                }
+            }
+        }
+
+        // Call this method to enable weapon switching after both are picked up
+        public void EnableWeaponSwitching()
+        {
+            canSwitchWeapons = true;
+        }
+
+        // Method to enable only one weapon
+        public void EquipWeapon(GameObject weaponPrefab)
+        {
+            gunSound.Play();
+            gunSound.pitch = 0.8f;
+            if (weaponPrefab == shotgunPrefab)
+            {
+                isShotgun = true;
+                shotgunPrefab.SetActive(true);
+                sniperPrefab.SetActive(false);
+            }
+            else if (weaponPrefab == sniperPrefab)
+            {
+                isSniper = true;
+                sniperPrefab.SetActive(true);
+                shotgunPrefab.SetActive(false);
             }
         }
     }

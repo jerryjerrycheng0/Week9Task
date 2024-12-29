@@ -27,15 +27,17 @@ namespace GameDevWithMarco.Interfaces
             // Activate the correct weapon in the Player_Movement script
             if (Gun)
             {
-                playerMovement.isShotgun = true;
-                playerMovement.sniperPrefab.SetActive(false);
-                playerMovement.shotgunPrefab.SetActive(true);
+                playerMovement.EquipWeapon(playerMovement.shotgunPrefab);
             }
             else
             {
-                playerMovement.isSniper = true;
-                playerMovement.sniperPrefab.SetActive(true);
-                playerMovement.shotgunPrefab.SetActive(false);
+                playerMovement.EquipWeapon(playerMovement.sniperPrefab);
+            }
+
+            // Enable switching weapons once both are picked up
+            if (playerMovement.isShotgun && playerMovement.isSniper)
+            {
+                playerMovement.EnableWeaponSwitching();
             }
         }
     }
