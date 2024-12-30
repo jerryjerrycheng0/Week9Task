@@ -15,6 +15,7 @@ namespace GameDevWithMarco.Player
         [Range(1f, 20f)] public float jumpStrenght;
         Vector2 movementValue;
         public bool facingRight = true;
+        [SerializeField] AudioSource jumpSound;
 
         [Header("Movement Juice Variables")]
         public float maxSpeed = 7f;
@@ -138,6 +139,7 @@ namespace GameDevWithMarco.Player
         {
             rb.velocity = new Vector2(rb.velocity.x, 0);
             rb.AddForce(Vector2.up * jumpStrenght, ForceMode2D.Impulse);
+            jumpSound.Play();
         }
 
         private void GroundCheck()
