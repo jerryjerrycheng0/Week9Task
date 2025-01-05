@@ -8,24 +8,24 @@ namespace GameDevWithMarco.Player
     public class Player_ShootingSniper : MonoBehaviour
     {
         [Header("Shooting Variables")]
-        [SerializeField] private Transform tipOfTheBarrel; // Assigned dynamically
-        [SerializeField] private float bulletSpeed; // Bullet speed
-        [SerializeField] private GameEvent bulletShot; // Event to raise when bullet is shot
-        [SerializeField] private ParticleSystem sparks; // Particle system for sparks
-        [SerializeField] private GameObject muzzleFlash; // Muzzle flash effect
+        [SerializeField] private Transform tipOfTheBarrel;
+        [SerializeField] private float bulletSpeed; 
+        [SerializeField] private GameEvent bulletShot; 
+        [SerializeField] private ParticleSystem sparks; 
+        [SerializeField] private GameObject muzzleFlash;
 
         [Header("Reloading Variables")]
-        [SerializeField] private float reloadTime = 2f; // Time it takes to reload the sniper rifle
-        [SerializeField] private bool isReloading = false; // Track reload state
-        [SerializeField] private int maxAmmo = 5; // Max ammo count
-        [SerializeField] private int currentAmmo; // Current ammo count
+        [SerializeField] private float reloadTime = 2f; 
+        [SerializeField] private bool isReloading = false; 
+        [SerializeField] private int maxAmmo = 5;
+        [SerializeField] private int currentAmmo; 
 
         [Header("Sounds")]
         [SerializeField] AudioSource shootingSound;
         [SerializeField] AudioSource reloadSound;
 
-        private Transform weaponTransform; // Current weapon's transform
-        private Player_Recoil playerRecoil; // Reference to the recoil script
+        private Transform weaponTransform;
+        private Player_Recoil playerRecoil; 
 
         private void Start()
         {

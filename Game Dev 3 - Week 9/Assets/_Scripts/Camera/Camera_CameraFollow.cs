@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace GameDevWithMarco.CameraStuff
@@ -29,19 +27,22 @@ namespace GameDevWithMarco.CameraStuff
             //To make sure that the camera will not overlap with the player
             Vector3 desiredPosition = targetToFollow.position + cameraOffset;
 
-
-            Vector3 boundPosition = new Vector3(                            //We will create a new Vector 3 to set the bounds
-                Mathf.Clamp(desiredPosition.x, minValue.x, maxValue.x),     //Clamp the new x value between the max x and min x
-                Mathf.Clamp(desiredPosition.y, minValue.y, maxValue.y),     //Clamp the new y value between the max y and min y
-                Mathf.Clamp(desiredPosition.z, minValue.z, maxValue.z));    //Clamp the new z value between the max z and min z
-
-
+            Vector3 boundPosition = BoundPosition(desiredPosition);
 
             //Will make the camera follow smoothly with some delay instead of being locked to the target
             //We have changed this to use the boundPosition as a target instead ot the desiredPosition
             Vector3 smoothedPosition = Vector3.Lerp(transform.position, boundPosition, smoothSpeed * Time.deltaTime);
             //Actually moves the camera to the smoothedPosition Vector3 location
             transform.position = smoothedPosition;
+        }
+
+        private Vector3 BoundPosition(Vector3 desiredPosition)
+        {
+            Vector3 boundPosition = new Vector3(                            //We will create a new Vector 3 to set the bounds
+                            Mathf.Clamp(desiredPosition.x, minValue.x, maxValue.x),     //Clamp the new x value between the max x and min x
+                            Mathf.Clamp(desiredPosition.y, minValue.y, maxValue.y),     //Clamp the new y value between the max y and min y
+                            Mathf.Clamp(desiredPosition.z, minValue.z, maxValue.z));    //Clamp the new z value between the max z and min z
+            return boundPosition;
         }
     }
 }

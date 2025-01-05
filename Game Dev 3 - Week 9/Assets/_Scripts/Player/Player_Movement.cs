@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using GameDevWithMarco.Interfaces;
 
 namespace GameDevWithMarco.Player
 {
@@ -38,7 +35,7 @@ namespace GameDevWithMarco.Player
         public bool isSniper = false;
         [SerializeField] AudioSource gunSound;
 
-        private bool canSwitchWeapons = false;  // To check if both weapons are picked up
+        private bool canSwitchWeapons = false;  // To check if both weapons are picked up. Only picking both weapons allows switching
 
         //------- Built-in Methods -------
         void Start()
@@ -187,17 +184,22 @@ namespace GameDevWithMarco.Player
                 if (isShotgun && isSniper)
                 {
                     // Toggle between weapons
-                    if (shotgunPrefab.activeSelf)
-                    {
-                        shotgunPrefab.SetActive(false);
-                        sniperPrefab.SetActive(true);
-                    }
-                    else
-                    {
-                        shotgunPrefab.SetActive(true);
-                        sniperPrefab.SetActive(false);
-                    }
+                    ToogleGuns();
                 }
+            }
+        }
+
+        private void ToogleGuns()
+        {
+            if (shotgunPrefab.activeSelf)
+            {
+                shotgunPrefab.SetActive(false);
+                sniperPrefab.SetActive(true);
+            }
+            else
+            {
+                shotgunPrefab.SetActive(true);
+                sniperPrefab.SetActive(false);
             }
         }
 

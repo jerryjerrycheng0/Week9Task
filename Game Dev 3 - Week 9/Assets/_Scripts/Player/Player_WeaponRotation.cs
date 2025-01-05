@@ -1,16 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace GameDevWithMarco.Player
 {
     public class Player_WeaponRotation : MonoBehaviour
     {
-        private Vector2 mousePosition; // To store the mouse position
-        private float angle; // To store the calculated angle
-        [SerializeField] Transform weaponTransform; // Reference to the weapon's Transform
+        private Vector2 mousePosition; 
+        private float angle; 
+        [SerializeField] Transform weaponTransform; 
 
-        [SerializeField] private Transform target; // The target to follow (e.g., player's hand)
+        [SerializeField] private Transform target; 
 
         private void Update()
         {

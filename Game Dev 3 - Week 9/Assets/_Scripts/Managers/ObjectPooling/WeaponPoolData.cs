@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,10 +6,10 @@ namespace GameDevWithMarco.DesignPattern
     [CreateAssetMenu(fileName = "WeaponPoolData", menuName = "Scriptable Objects/WeaponPoolData", order = 1)]
     public class WeaponPoolData : ScriptableObject
     {
-        public string poolName; // Name of the pool (e.g., "ShotgunPool")
-        public GameObject weaponPrefab; // The weapon prefab for this pool
-        public int poolAmount = 10; // Amount of objects to pool
-        public List<GameObject> pooledObjects = new List<GameObject>(); // List to hold pooled objects
+        public string poolName; 
+        public GameObject weaponPrefab; 
+        public int poolAmount = 10; 
+        public List<GameObject> pooledObjects = new List<GameObject>(); 
 
         // Method to initialize the pool
         public void InitializePool()
@@ -19,7 +18,7 @@ namespace GameDevWithMarco.DesignPattern
             for (int i = 0; i < poolAmount; i++)
             {
                 GameObject weapon = Instantiate(weaponPrefab);
-                weapon.SetActive(false); // Disable the object initially
+                weapon.SetActive(false); 
                 pooledObjects.Add(weapon);
             }
         }
@@ -29,13 +28,13 @@ namespace GameDevWithMarco.DesignPattern
         {
             foreach (GameObject weapon in pooledObjects)
             {
-                if (!weapon.activeInHierarchy) // If the weapon is not active, return it from the pool
+                if (!weapon.activeInHierarchy) 
                 {
                     weapon.SetActive(true);
                     return weapon;
                 }
             }
-            // If no inactive weapon is available, return null or instantiate a new one
+            
             Debug.LogWarning("No available weapons in the pool for " + poolName);
             return null;
         }

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace GameDevWithMarco.DesignPattern
@@ -43,6 +41,23 @@ namespace GameDevWithMarco.DesignPattern
         public GameObject GetPoolItem(TypeOfPool poolToUse)
         {
             PoolData pool = ScriptableObject.CreateInstance<PoolData>();
+            pool = StorePool(poolToUse, pool);
+
+            for (int i = 0; i < pool.pooledObjectContainer.Count; i++)
+            {
+                if (!pool.pooledObjectContainer[i].activeInHierarchy)
+                {
+                    pool.pooledObjectContainer[i].SetActive(true);
+                    return pool.pooledObjectContainer[i];
+                }
+            }
+
+            Debug.LogWarning("No Available Items Found or Pool Too Small!");
+            return null;
+        }
+
+        private PoolData StorePool(TypeOfPool poolToUse, PoolData pool)
+        {
             switch (poolToUse)
             {
                 case TypeOfPool.BulletPool:
@@ -56,17 +71,7 @@ namespace GameDevWithMarco.DesignPattern
                     break;
             }
 
-            for (int i = 0; i < pool.pooledObjectContainer.Count; i++)
-            {
-                if (!pool.pooledObjectContainer[i].activeInHierarchy)
-                {
-                    pool.pooledObjectContainer[i].SetActive(true);
-                    return pool.pooledObjectContainer[i];
-                }
-            }
-
-            Debug.LogWarning("No Available Items Found or Pool Too Small!");
-            return null;
+            return pool;
         }
 
         public void SwitchWeapon(GameObject newWeapon)

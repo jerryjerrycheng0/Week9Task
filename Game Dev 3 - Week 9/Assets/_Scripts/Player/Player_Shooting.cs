@@ -7,11 +7,11 @@ namespace GameDevWithMarco.Player
     public class Player_Shooting : MonoBehaviour
     {
         [Header("Shooting Variables")]
-        [SerializeField] Transform tipOfTheBarrel; // Assigned dynamically
+        [SerializeField] Transform tipOfTheBarrel; 
         [SerializeField] private float bulletSpeed;
         [SerializeField] private GameEvent bulletShot;
         [SerializeField] private ParticleSystem sparks;
-        [SerializeField] private GameObject muzzleFlash; // Muzzle flash particle system
+        [SerializeField] private GameObject muzzleFlash; 
 
         [Header("Reloading Variables")]
         private Transform weaponTransform; // Current weapon's transform
@@ -45,6 +45,13 @@ namespace GameDevWithMarco.Player
             // Spawn a bullet
             GameObject spawnedBullet = ObjectPoolingPattern.Instance.GetPoolItem(ObjectPoolingPattern.TypeOfPool.BulletPool);
 
+            BulletLogic(spawnedBullet);
+
+            TriggerEffect();
+        }
+
+        private void BulletLogic(GameObject spawnedBullet)
+        {
             if (spawnedBullet != null && tipOfTheBarrel != null)
             {
                 spawnedBullet.transform.position = tipOfTheBarrel.position;
@@ -62,8 +69,6 @@ namespace GameDevWithMarco.Player
                     Destroy(flash, 0.1f); // Destroy the flash after a short duration
                 }
             }
-
-            TriggerEffect();
         }
 
         private void TriggerEffect()
